@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux / temp
+*~
+*.swp
+*.swo
+*.tmp
+*.temp
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.vscode/
+.idea/
+*.iml
+
+# Python cache (if scripts expand)
+__pycache__/
+*.pyc
+
+# Node (if tooling added later)
+node_modules/
+
+# Kubernetes local files
+kubeconfig
