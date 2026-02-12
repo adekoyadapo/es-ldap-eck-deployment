@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: es-ldap-role-mapping
+  namespace: lab
+type: Opaque
+stringData:
+  role_mapping.yml: |
+    kibana_admin:
+      - "cn=es-users,ou=groups,dc=example,dc=org"
+    superuser:
+      - "cn=es-users,ou=groups,dc=example,dc=org"

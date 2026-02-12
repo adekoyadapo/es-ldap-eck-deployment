@@ -1,0 +1,55 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: elasticsearch
+  namespace: lab
+spec:
+  version: __ES_VERSION__
+  secureSettings:
+    - secretName: es-ldap-bind-secret
+  http:
+    tls:
+      certificate:
+        secretName: es-kibana-tls
+  nodeSets:
+    - name: default
+      count: 1
+      config:
+        xpack.security.authc.realms.file.file1.order: 0
+        xpack.security.authc.realms.native.native1.order: 1
+        xpack.security.authc.realms.ldap.ldap1.order: 2
+        xpack.security.authc.realms.ldap.ldap1.url: "ldaps://ldap.lab.svc.cluster.local:636"
+        xpack.security.authc.realms.ldap.ldap1.bind_dn: "cn=admin,dc=example,dc=org"
+        xpack.security.authc.realms.ldap.ldap1.user_search.base_dn: "ou=people,dc=example,dc=org"
+        xpack.security.authc.realms.ldap.ldap1.user_search.filter: "(uid={0})"
+        xpack.security.authc.realms.ldap.ldap1.group_search.base_dn: "ou=groups,dc=example,dc=org"
+        xpack.security.authc.realms.ldap.ldap1.files.role_mapping: "/usr/share/elasticsearch/config/role-mappings/role_mapping.yml"
+        xpack.security.authc.realms.ldap.ldap1.ssl.certificate_authorities: ["/usr/share/elasticsearch/config/ldap-certs/ca.crt"]
+        xpack.security.authc.realms.ldap.ldap1.ssl.verification_mode: full
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  cpu: "500m"
+                  memory: 2Gi
+                limits:
+                  memory: 2Gi
+              volumeMounts:
+                - name: ldap-ca
+                  mountPath: /usr/share/elasticsearch/config/ldap-certs
+                  readOnly: true
+                - name: role-mapping
+                  mountPath: /usr/share/elasticsearch/config/role-mappings
+                  readOnly: true
+          volumes:
+            - name: ldap-ca
+              secret:
+                secretName: ldap-ldaps-tls
+                items:
+                  - key: ca.crt
+                    path: ca.crt
+            - name: role-mapping
+              secret:
+                secretName: es-ldap-role-mapping

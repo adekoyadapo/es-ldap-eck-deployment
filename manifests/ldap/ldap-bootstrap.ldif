@@ -1,0 +1,22 @@
+dn: ou=people,dc=example,dc=org
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=example,dc=org
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=jane,ou=people,dc=example,dc=org
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+cn: Jane Doe
+sn: Doe
+uid: jane
+mail: jane@example.org
+userPassword: Password123!
+
+dn: cn=es-users,ou=groups,dc=example,dc=org
+objectClass: groupOfNames
+cn: es-users
+member: uid=jane,ou=people,dc=example,dc=org

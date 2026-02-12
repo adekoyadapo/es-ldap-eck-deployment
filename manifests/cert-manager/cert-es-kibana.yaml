@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: es-kibana-cert
+  namespace: lab
+spec:
+  secretName: es-kibana-tls
+  issuerRef:
+    name: lab-ca-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - es.__HOST_IP__.sslip.io
+    - kibana.__HOST_IP__.sslip.io
+    - elasticsearch-es-http.lab.svc
+    - elasticsearch-es-http.lab.svc.cluster.local
+    - kibana-kb-http.lab.svc
+    - kibana-kb-http.lab.svc.cluster.local

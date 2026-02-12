@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ldap
+  namespace: lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ldap
+  template:
+    metadata:
+      labels:
+        app: ldap
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: openldap
+          image: osixia/openldap:1.5.0
+          args: ["--copy-service"]
+          ports:
+            - containerPort: 389
+            - containerPort: 636
+          env:
+            - name: LDAP_ORGANISATION
+              value: "Example Org"
+            - name: LDAP_DOMAIN
+              value: "example.org"
+            - name: LDAP_BASE_DN
+              value: "dc=example,dc=org"
+            - name: LDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ldap-admin-credentials
+                  key: LDAP_ADMIN_PASSWORD
+            - name: LDAP_TLS
+              value: "true"
+            - name: LDAP_TLS_CRT_FILENAME
+              value: "tls.crt"
+            - name: LDAP_TLS_KEY_FILENAME
+              value: "tls.key"
+            - name: LDAP_TLS_CA_CRT_FILENAME
+              value: "ca.crt"
+            - name: LDAP_TLS_VERIFY_CLIENT
+              value: "never"
+          volumeMounts:
+            - name: ldap-tls
+              mountPath: /container/service/slapd/assets/certs
+              readOnly: true
+            - name: ldap-bootstrap
+              mountPath: /container/service/slapd/assets/config/bootstrap/ldif/custom/50-bootstrap.ldif
+              subPath: ldap-bootstrap.ldif
+      volumes:
+        - name: ldap-tls
+          secret:
+            secretName: ldap-ldaps-tls
+        - name: ldap-bootstrap
+          configMap:
+            name: ldap-bootstrap

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: es-ldap-bind-secret
+  namespace: lab
+type: Opaque
+stringData:
+  xpack.security.authc.realms.ldap.ldap1.secure_bind_password: Admin123!
