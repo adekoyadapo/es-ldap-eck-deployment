@@ -13,7 +13,7 @@ spec:
         secretName: es-kibana-tls
   nodeSets:
     - name: default
-      count: 1
+      count: 2
       config:
         xpack.security.authc.realms.file.file1.order: 0
         xpack.security.authc.realms.native.native1.order: 1
@@ -53,3 +53,12 @@ spec:
             - name: role-mapping
               secret:
                 secretName: es-ldap-role-mapping
+  monitoring:
+    metrics:
+      elasticsearchRefs:
+      - name: elasticsearch
+        namespace: lab
+    logs:
+      elasticsearchRefs:
+      - name: elasticsearch
+        namespace: lab

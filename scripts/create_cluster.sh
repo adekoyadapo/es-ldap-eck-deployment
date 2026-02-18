@@ -13,7 +13,7 @@ if k3d cluster list | awk '{print $1}' | grep -qx "${CLUSTER_NAME}"; then
 else
   k3d cluster create "${CLUSTER_NAME}" \
     --servers 1 \
-    --agents 0 \
+    --agents 2 \
     --wait \
     --k3s-arg "--disable=traefik@server:0" \
     -p "80:80@loadbalancer" \

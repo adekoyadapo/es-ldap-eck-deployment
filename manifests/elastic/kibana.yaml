@@ -12,3 +12,12 @@ spec:
     tls:
       certificate:
         secretName: es-kibana-tls
+  monitoring:
+    metrics:
+      elasticsearchRefs:
+      - name: elasticsearch
+        namespace: lab
+    logs:
+      elasticsearchRefs:
+      - name: elasticsearch
+        namespace: lab
